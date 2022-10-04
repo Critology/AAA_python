@@ -60,7 +60,7 @@ def departments_summary(file_name='HW_2/Corp_Summary.csv') -> dict:
     return dict_deps
 
 
-def writing_file_from_dict(file_name='HW_2/Corp_Summary.csv'):
+def writing_file_from_dict(file_name='HW_2/Corp_Summary.csv') -> None:
     """Записываем наш словарь в csv"""
     my_dict = departments_summary()
     with open('HW_2/Department_Summary.csv', 'w', encoding='utf-8') as f:
@@ -69,5 +69,27 @@ def writing_file_from_dict(file_name='HW_2/Corp_Summary.csv'):
         w.writerow(my_dict)
 
 
-print(departments_summary())
-writing_file_from_dict()
+def choice_option():
+    options = {
+            '1': 'Вывести иерархию команд',
+            '2': 'Вывести сводный отчёт по департаментам',
+            '3': 'Сохранить сводный отчёт',
+            '4': 'Выйти'
+                }
+    while True:
+        print('Выберите: ')
+        for k, v in options.items():
+            print(k, v)
+        opt = input()
+        if opt == '1':
+            print(teams_in_departments())
+        elif opt == '2':
+            print(departments_summary())
+        elif opt == '3':
+            writing_file_from_dict()
+        else:
+            return
+
+
+if __name__ == '__main__':
+    choice_option()
