@@ -3,19 +3,18 @@ import csv
 
 def reading_file_in_dict(file_name='HW_2/Corp_Summary.csv') -> dict:
     """Считываем csv в словарь"""
-    f = open(file_name, 'r', encoding='utf8')
-    reader = csv.reader(f)
-    my_list = []
-    for line in reader:
-        my_list.append(line[0].split(';'))
-    my_dict = {}
-    keys = my_list[0]
-    my_list.pop(0)
-    for elem in keys:
-        my_dict[elem] = []
-    for row in my_list:
-        for i, elem in enumerate(keys):
-            my_dict[elem].append(row[i])
+    with open(file_name, 'r', encoding='utf8') as f:
+        reader = csv.reader(f)
+        my_list = []
+        for line in reader:
+            my_list.append(line[0].split(';'))
+        my_dict = {}
+        keys = my_list[0]
+        for elem in keys:
+            my_dict[elem] = []
+        for row in my_list[1:]:
+            for i, elem in enumerate(keys):
+                my_dict[elem].append(row[i])
     return my_dict
 
 
@@ -42,7 +41,7 @@ def departments_summary(file_name='HW_2/Corp_Summary.csv') -> dict:
         if dict_deps.get(dep) is None:
             dict_deps[dep] = {
                 'Численность': 0,
-                '"Вилка" зарплат': [10**10, 0],
+                '"Вилка" зарплат': [10**10, 0], # сравнивать с первой зарплатой
                 'Средняя зарплата': [0, 0]
             }
     for key_dep in dict_deps.keys():
@@ -63,10 +62,21 @@ def departments_summary(file_name='HW_2/Corp_Summary.csv') -> dict:
 def writing_file_from_dict(file_name='HW_2/Corp_Summary.csv') -> None:
     """Записываем наш словарь в csv"""
     my_dict = departments_summary()
+    dict_in_list = []
+    my_list_1 = []
+    for el in my_dict:
+        my_list_1.append(el)
+    dict_in_list.append(my_list_1)
+    for elem in my_dict:
+        my_list_2 = []
+        for val in my_dict[elem]:
+            my_list_2.append(val+': '+str(my_dict[elem][val]))
+        dict_in_list.append(my_list_2)
+    print(dict_in_list)
     with open('HW_2/Department_Summary.csv', 'w', encoding='utf-8') as f:
-        w = csv.DictWriter(f, my_dict.keys())
-        w.writeheader()
-        w.writerow(my_dict)
+        w = csv.writer(f, dict_in_list)
+        w.writerow(dict_in_list[0])  # в строку
+        w.writerows(dict_in_list[1:])
 
 
 def choice_option():
