@@ -1,25 +1,26 @@
 class CountVectorizer:
 
-    def __init__(self, texts: list):
-        self.texts = texts
+    def __init__(self):
+        self.vocabulary = None
 
     def get_feature_names(self) -> list:
-        dummy = []
-        feature_names = []
-        for elem in self.texts:
-            dummy += elem.lower().split()
-        for elem in dummy:
-            if elem not in feature_names:
-                feature_names.append(elem)
-        return feature_names
+        '''Gets vocabylary of unique words'''
+        if self.vocabulary is None:
+            raise ValueError('No vocabulary')
+        return self.vocabulary
 
-    def fit_transform(self) -> list:
+    def fit_transform(self, texts: list) -> list:
+        '''Gets vectors from texts'''
+        self.vocabulary = []
+        for elem in texts:
+            self.vocabulary += elem.lower().split()
+        self.vocabulary = [x for i, x in enumerate(self.vocabulary)
+                           if i == self.vocabulary.index(x)]
         occurrences = []
-        feature_names = self.get_feature_names()
-        texts_lists = [x.lower().split() for x in self.texts]
+        texts_lists = [x.lower().split() for x in texts]
         for elem in texts_lists:
             dummy = []
-            for x in feature_names:
+            for x in self.vocabulary:
                 dummy.append(elem.count(x))
             occurrences.append(dummy)
         return occurrences
@@ -30,7 +31,7 @@ corpus = [
  'Pasta Pomodoro Fresh ingredients Parmesan to taste'
 ]
 
-vectorizer = CountVectorizer(corpus)
+vectorizer = CountVectorizer()
 
+print(vectorizer.fit_transform(corpus))
 print(vectorizer.get_feature_names())
-print(vectorizer.fit_transform())
