@@ -11,13 +11,12 @@ class CountVectorizer:
 
     def fit_transform(self, texts: list) -> list:
         '''Gets vectors from texts'''
-        self.vocabulary = []
-        for elem in texts:
-            self.vocabulary += elem.lower().split()
-        self.vocabulary = [x for i, x in enumerate(self.vocabulary)
-                           if i == self.vocabulary.index(x)]
-        occurrences = []
         texts_lists = [x.lower().split() for x in texts]
+        self.vocabulary = []
+        for elem in texts_lists:
+            self.vocabulary += elem
+        self.vocabulary = list(set(self.vocabulary))
+        occurrences = []
         for elem in texts_lists:
             dummy = []
             for x in self.vocabulary:
