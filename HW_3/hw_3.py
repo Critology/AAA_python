@@ -31,6 +31,6 @@ corpus = [
 ]
 
 vectorizer = CountVectorizer()
-
+count_matrix = vectorizer.fit_transform(corpus)
 print(vectorizer.fit_transform(corpus))
 print(vectorizer.get_feature_names())
