@@ -11,11 +11,11 @@ class AdvertAtr:
         return None
 
 
-class ColorizeMixin():
-    repr_color_code = 33  # green
+class ColorizeMixin:
+    repr_color_code = 31  # red
 
-    def __repr__(self):
-        return f"\033[1;31;40m {self.title} | {self.price} ₽\033[0;0;0m"
+    def __str__(self):
+        return f"\033[1;{self.repr_color_code};40m{self.__repr__()}\033[0;0;0m"
 
 
 class Advert(ColorizeMixin, AdvertAtr):
@@ -26,6 +26,9 @@ class Advert(ColorizeMixin, AdvertAtr):
                 raise ValueError('Price must be >= 0')
         else:
             self.price = 0
+
+    def __repr__(self):
+        return f" {self.title} | {self.price} ₽"
 
 
 if __name__ == "__main__":
@@ -61,7 +64,7 @@ if __name__ == "__main__":
 
     lesson_str = """{
     "title": "python",
-    "price": - 10,
+    "price": -10,
     "location": {
                 "address": "город Москва, Лесная, 7",
                 "metro_stations": ["Белорусская"]
